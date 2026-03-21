@@ -74,10 +74,14 @@ The application will be available at `http://localhost:8080`.
   - `./mvnw spring-boot:run` - Start the application
   - `./mvnw test` - Run unit and integration tests
 
-## API Documentation
-Once the application is running, you can access the Swagger UI at:
-- `http://localhost:8080/swagger-ui/index.html`
-- OpenAPI definition: `http://localhost:8080/v3/api-docs`
+## Service URLs
+Once the application and infrastructure are running, you can access the following services:
+
+- **Swagger UI:** [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
+- **OpenAPI definition:** [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs)
+- **FusionAuth Admin UI:** [http://localhost:9011](http://localhost:9011)
+- **MinIO Console:** [http://localhost:9001](http://localhost:9001)
+- **Mailpit Web UI:** [http://localhost:8025](http://localhost:8025)
 
 ## Project Structure
 - `src/main/java`: Source code
