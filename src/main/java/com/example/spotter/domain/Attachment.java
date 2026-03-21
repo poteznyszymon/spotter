@@ -1,0 +1,16 @@
+package com.example.spotter.domain;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+public class Attachment {
+
+    private UUID uuid;
+    private String objectKey;
+    private String bucketName;
+    private String originalName;
+    private String contentType;
+    private Long size;
+    private LocalDateTime createdAt;
+
+}
