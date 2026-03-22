@@ -83,13 +83,8 @@ Once the application and infrastructure are running, you can access the followin
 - **MinIO Console:** [http://localhost:9001](http://localhost:9001)
 - **Mailpit Web UI:** [http://localhost:8025](http://localhost:8025)
 
-## Project Structure
-- `src/main/java`: Source code
-  - `com.example.spotter.configuration`: Configuration classes (Security, etc.)
-  - `com.example.spotter.SpotterApplication`: Main entry point
-- `src/main/resources`: Configuration files (application.yaml)
-- `src/test/java`: Tests
-- `docker-compose.yml`: Infrastructure services configuration
+## Architecture
+The project follows **Hexagonal Architecture** (also known as Ports and Adapters), ensuring a clean separation of concerns and making the core logic independent of external frameworks or tools.
 
 ## Tests
 To run the tests:

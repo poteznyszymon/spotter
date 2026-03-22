@@ -79,6 +79,12 @@
 			<artifactId>spring-boot-starter-webmvc-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>io.fusionauth</groupId>
+			<artifactId>fusionauth-java-client</artifactId>
+			<version>1.64.0</version>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
