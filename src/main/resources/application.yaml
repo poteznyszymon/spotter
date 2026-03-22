@@ -9,5 +9,13 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  devtools:
+    livereload:
+      enabled: false
 server:
   port: 8080
+
+fusionauth:
+  url: http://localhost:9011
+  apiKey: ${FUSIONAUTH_API_KEY}
+  applicationId: ${FUSIONAUTH_CLIENT_ID}
