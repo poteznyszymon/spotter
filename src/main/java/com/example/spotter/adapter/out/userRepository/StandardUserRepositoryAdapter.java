@@ -15,7 +15,7 @@ public class StandardUserRepositoryAdapter implements UserRepositoryPort {
 
     @Override
     public void save(User user) {
-        UserEntity userEntity = toEntity(user);
+        var userEntity = toEntity(user);
         userJpaRepository.save(userEntity);
     }
 

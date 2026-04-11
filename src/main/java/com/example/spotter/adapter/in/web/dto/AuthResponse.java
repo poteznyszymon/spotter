@@ -1,4 +1,4 @@
 package com.example.spotter.adapter.in.web.dto;
 
-public record AuthResponse() {
+public record AuthResponse(String token) {
 }

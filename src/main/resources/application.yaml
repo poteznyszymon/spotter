@@ -15,7 +15,7 @@ spring:
 server:
   port: 8080
 
-fusionauth:
+fusionAuth:
   url: http://localhost:9011
   apiKey: ${FUSIONAUTH_API_KEY}
   applicationId: ${FUSIONAUTH_CLIENT_ID}

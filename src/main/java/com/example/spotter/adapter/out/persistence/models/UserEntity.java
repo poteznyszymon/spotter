@@ -19,7 +19,7 @@ public class UserEntity {
     private UUID uuid;
 
     @Column(nullable = false)
-    private String fusionAuthId;
+    private UUID fusionAuthId;
 
     @Column(unique = true, nullable = false)
     private String email;

@@ -1,16 +1,18 @@
 package com.example.spotter.adapter.out.fusionAuth;
 
+import com.example.spotter.domain.AuthResult;
+import com.example.spotter.domain.User;
 import com.example.spotter.port.out.FusionAuthPort;
 
 public class DummyFusionAuthAdapter implements FusionAuthPort {
 
     @Override
-    public void register() {
-
+    public AuthResult register(User user) {
+        return new AuthResult("dummy-token");
     }
 
     @Override
-    public void login() {
-
+    public AuthResult login(User user) {
+        return new AuthResult("dummy-token");
     }
 }
