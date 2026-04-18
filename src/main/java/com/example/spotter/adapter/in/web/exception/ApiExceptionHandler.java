@@ -1,9 +1,8 @@
 package com.example.spotter.adapter.in.web.exception;
 
-import com.example.spotter.application.exception.AuthProviderException;
-import com.example.spotter.application.exception.InvalidCredentialsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -24,13 +23,8 @@ public class ApiExceptionHandler {
         return pd;
     }
 
-    @ExceptionHandler(AuthProviderException.class)
-    public ProblemDetail handleAuthProviderException(AuthProviderException exception) {
-        return ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, exception.getMessage());
-    }
-
-    @ExceptionHandler(InvalidCredentialsException.class)
-    public ProblemDetail handleInvalidCredentials(InvalidCredentialsException ex) {
+    @ExceptionHandler(BadCredentialsException.class)
+    public ProblemDetail handleBadCredentials(BadCredentialsException ex) {
         var problemDetail = ProblemDetail.forStatus(HttpStatus.UNAUTHORIZED);
         problemDetail.setTitle("Invalid credentials");
         problemDetail.setDetail(ex.getMessage());
