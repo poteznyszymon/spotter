@@ -1,9 +1,6 @@
 package com.example.spotter.domain;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -11,7 +8,6 @@ import java.util.UUID;
 @Data
 public class User {
     private UUID uuid;
-    private UUID authProviderId;
     private String username;
     private String email;
     private String firstName;

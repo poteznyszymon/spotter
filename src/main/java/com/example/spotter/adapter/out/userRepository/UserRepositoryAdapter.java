@@ -7,11 +7,11 @@ import com.example.spotter.port.out.UserRepositoryPort;
 
 import java.util.Optional;
 
-public class StandardUserRepositoryAdapter implements UserRepositoryPort {
+public class UserRepositoryAdapter implements UserRepositoryPort {
 
     private final UserJpaRepository userJpaRepository;
 
-    public StandardUserRepositoryAdapter(UserJpaRepository userJpaRepository) {
+    public UserRepositoryAdapter(UserJpaRepository userJpaRepository) {
         this.userJpaRepository = userJpaRepository;
     }
 
