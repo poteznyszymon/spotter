@@ -1,27 +1,30 @@
 package com.example.spotter.domain;
 
+import lombok.Data;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Getter
+@Data
 public class User {
-
     private UUID uuid;
     private UUID authProviderId;
+    private String username;
     private String email;
     private String firstName;
     private String lastName;
     private String password;
+    private Role role;
     private Attachment avatar;
     private LocalDateTime createdAt;
 
-    public User(String email, String firstName, String lastName, String password) {
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public User() {}
+
+    public User(String username, String password) {
+        this.username = username;
         this.password = password;
     }
-
 }

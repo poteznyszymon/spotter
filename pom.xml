@@ -80,10 +80,16 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>io.fusionauth</groupId>
-			<artifactId>fusionauth-java-client</artifactId>
-			<version>1.64.0</version>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.13.0</version>
 			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.spockframework</groupId>
+			<artifactId>spock-core</artifactId>
+			<version>2.4-groovy-5.0</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

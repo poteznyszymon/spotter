@@ -15,7 +15,11 @@ spring:
 server:
   port: 8080
 
-fusionAuth:
-  url: http://localhost:9011
-  apiKey: ${FUSIONAUTH_API_KEY}
-  applicationId: ${FUSIONAUTH_CLIENT_ID}
+adminCredentials:
+  username: ${ADMIN_USERNAME}
+  password: ${ADMIN_PASSWORD}
+
+jwt-properties:
+  secret: ${JWT_SECRET}
+  expirationTimeMs: ${JWT_EXPIRATION_MS}
+  accessTokenName: ${JWT_ACCESS_TOKEN_NAME}

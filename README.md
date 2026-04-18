@@ -1,16 +1,16 @@
 # Spotter
 
-A Spring Boot application with PostgreSQL, FusionAuth, MinIO, and Mailpit integration.
+A Spring Boot application with PostgreSQL, MinIO, and Mailpit integration.
 
 ## Overview
-Spotter is a Java-based backend application built with Spring Boot. It provides security integration with FusionAuth, file storage via MinIO, and email testing with Mailpit.
+Spotter is a Java-based backend application built with Spring Boot. It provides JWT-based authentication, file storage via MinIO, and email testing with Mailpit.
 
 ## Tech Stack
 - **Language:** Java 21
 - **Framework:** Spring Boot 4.0.4
 - **Package Manager:** Maven
 - **Database:** PostgreSQL 16
-- **Identity Provider:** FusionAuth
+- **Authentication:** JWT (jjwt)
 - **Object Storage:** MinIO
 - **Mail Testing:** Mailpit
 - **API Documentation:** SpringDoc OpenAPI (Swagger UI)
@@ -23,7 +23,7 @@ Spotter is a Java-based backend application built with Spring Boot. It provides 
 ## Setup & Run
 
 ### 1. Environment Configuration
-The application uses environment variables for configuration. A `.env` file is present in the root directory. Ensure it contains correct values:
+The application uses environment variables for configuration. Copy `.env.local` to `.env` and adjust values:
 
 ```bash
 # Postgres
@@ -33,27 +33,24 @@ POSTGRES_PASSWORD=postgres
 POSTGRES_HOST=localhost
 POSTGRES_PORT=5432
 
-# FusionAuth
-DATABASE_USERNAME=fusionauth
-DATABASE_PASSWORD=fusionauth
-FUSIONAUTH_APP_MEMORY=512M
-FUSIONAUTH_APP_RUNTIME_MODE=development
-FUSIONAUTH_APP_KICKSTART_FILE=/usr/local/fusionauth/kickstart/kickstart.json
-FUSIONAUTH_API_KEY=...
-FUSIONAUTH_CLIENT_ID=...
-FUSIONAUTH_CLIENT_SECRET=...
-
 # MinIO
-MINIO_ROOT_USER=minio123456
-MINIO_ROOT_PASSWORD=minio123456d
+MINIO_ROOT_USER=minioadmin
+MINIO_ROOT_PASSWORD=minioadmin
+MINIO_ENDPOINT=http://localhost:9000
+MINIO_BUCKET=spotter
 
 # JWT
-JWT_SECRET=...
-JWT_EXPIRATION=3600000
+JWT_SECRET=change-me-to-a-long-random-string
+JWT_EXPIRATION_MS=3600000
+JWT_ACCESS_TOKEN_NAME=token
+
+# APP
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=admin
 ```
 
 ### 2. Start Infrastructure
-Start the required services (PostgreSQL, FusionAuth, Mailpit, MinIO) using Docker Compose:
+Start the required services (PostgreSQL, Mailpit, MinIO) using Docker Compose:
 
 ```bash
 docker-compose up -d
@@ -79,7 +76,6 @@ Once the application and infrastructure are running, you can access the followin
 
 - **Swagger UI:** [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
 - **OpenAPI definition:** [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs)
-- **FusionAuth Admin UI:** [http://localhost:9011](http://localhost:9011)
 - **MinIO Console:** [http://localhost:9001](http://localhost:9001)
 - **Mailpit Web UI:** [http://localhost:8025](http://localhost:8025)
 
@@ -93,12 +89,6 @@ To run the tests:
 ```
 The project includes tests for Spring Boot application context, Security, and Web MVC.
 
-## TODOs
-- [ ] Add specific license information (currently empty in `pom.xml`)
-- [ ] Document specific API endpoints beyond the Swagger UI link
-- [ ] Configure CI/CD pipelines
-- [ ] Update `kickstart.json` documentation for FusionAuth (if applicable)
-
 ## License
 TODO: Add License Information.
 
@@ -107,7 +97,6 @@ For further reference, please consider the following sections:
 
 * [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
 * [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/4.0.4/maven-plugin)
-* [Create an OCI image](https://docs.spring.io/spring-boot/4.0.4/maven-plugin/build-image.html)
 * [Spring Boot DevTools](https://docs.spring.io/spring-boot/4.0.4/reference/using/devtools.html)
 * [Spring Web](https://docs.spring.io/spring-boot/4.0.4/reference/web/servlet.html)
 * [Spring Security](https://docs.spring.io/spring-boot/4.0.4/reference/web/spring-security.html)

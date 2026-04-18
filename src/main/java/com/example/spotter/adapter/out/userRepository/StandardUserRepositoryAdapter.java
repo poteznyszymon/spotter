@@ -5,6 +5,8 @@ import com.example.spotter.adapter.out.persistence.repository.UserJpaRepository;
 import com.example.spotter.domain.User;
 import com.example.spotter.port.out.UserRepositoryPort;
 
+import java.util.Optional;
+
 public class StandardUserRepositoryAdapter implements UserRepositoryPort {
 
     private final UserJpaRepository userJpaRepository;
@@ -19,8 +21,37 @@ public class StandardUserRepositoryAdapter implements UserRepositoryPort {
         userJpaRepository.save(userEntity);
     }
 
+    @Override
+    public Optional<User> findByUsername(String username) {
+        return userJpaRepository.findByUsername(username).map(this::toDomain);
+    }
+
+    @Override
+    public boolean existsByUsername(String username) {
+        return userJpaRepository.existsByUsername(username);
+    }
+
     UserEntity toEntity(User user) {
-        return null;
+        var entity = new UserEntity();
+        entity.setUsername(user.getUsername());
+        entity.setPassword(user.getPassword());
+        entity.setEmail(user.getEmail());
+        entity.setFirstName(user.getFirstName());
+        entity.setLastName(user.getLastName());
+        entity.setRole(user.getRole());
+        return entity;
+    }
+
+    User toDomain(UserEntity userEntity) {
+        var user = new User();
+        user.setUuid(userEntity.getUuid());
+        user.setUsername(userEntity.getUsername());
+        user.setPassword(userEntity.getPassword());
+        user.setEmail(userEntity.getEmail());
+        user.setFirstName(userEntity.getFirstName());
+        user.setLastName(userEntity.getLastName());
+        user.setRole(userEntity.getRole());
+        return user;
     }
 
 }
