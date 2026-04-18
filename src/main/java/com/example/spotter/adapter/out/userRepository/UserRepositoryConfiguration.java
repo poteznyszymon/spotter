@@ -10,7 +10,7 @@ public class UserRepositoryConfiguration {
 
     @Bean
     public UserRepositoryPort userRepositoryPort(UserJpaRepository userJpaRepository) {
-        return new StandardUserRepositoryAdapter(userJpaRepository);
+        return new UserRepositoryAdapter(userJpaRepository);
     }
 
 }
