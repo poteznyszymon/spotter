@@ -13,6 +13,8 @@ public class User {
     private String firstName;
     private String lastName;
     private String password;
+    private boolean locked;
+    private boolean enabled;
     private Role role;
     private Attachment avatar;
     private LocalDateTime createdAt;
@@ -21,6 +23,14 @@ public class User {
 
     public User(String username, String password) {
         this.username = username;
+        this.password = password;
+    }
+
+    public User(String email, String username, String firstName, String lastName, String password) {
+        this.email = email;
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.password = password;
     }
 }

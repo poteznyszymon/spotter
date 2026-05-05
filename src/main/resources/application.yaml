@@ -12,6 +12,11 @@ spring:
   devtools:
     livereload:
       enabled: false
+  mail:
+    host: localhost
+    port: 1025
+    username: ""
+    password: ""
 server:
   port: 8080
 
@@ -29,3 +34,4 @@ jwt-properties:
   secret: ${JWT_SECRET}
   expirationTimeMs: ${JWT_EXPIRATION_MS}
   accessTokenName: ${JWT_ACCESS_TOKEN_NAME}
+

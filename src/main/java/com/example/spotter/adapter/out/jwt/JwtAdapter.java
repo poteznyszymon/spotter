@@ -1,5 +1,6 @@
 package com.example.spotter.adapter.out.jwt;
 
+import com.example.spotter.domain.User;
 import com.example.spotter.port.out.TokenPort;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -21,13 +22,8 @@ public class JwtAdapter implements TokenPort {
     }
 
     @Override
-    public String generateToken(String username) {
-        return buildToken(username);
-    }
-
-    @Override
-    public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+    public String generateToken(User user) {
+        return buildToken(user);
     }
 
     @Override
@@ -36,10 +32,22 @@ public class JwtAdapter implements TokenPort {
         return (extractedUsername.equals(username));
     }
 
-    private String buildToken(String username) {
+    @Override
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = extractAllClaims(token);
+        return claimsResolver.apply(claims);
+    }
+
+    private String buildToken(User user) {
         return Jwts
                 .builder()
-                .subject(username)
+                .subject(user.getUsername())
+                .claim("id", user.getUuid().toString())
+                .claim("role", user.getRole().name())
+                .claim("enabled", user.isEnabled())
+                .claim("email", user.getEmail())
+                .claim("firstName", user.getFirstName())
+                .claim("lastName", user.getLastName())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expirationTimeMs))
                 .signWith(getSignInKey())
@@ -51,10 +59,6 @@ public class JwtAdapter implements TokenPort {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
-    }
 
     private Claims extractAllClaims(String token) {
         return Jwts
@@ -63,6 +67,10 @@ public class JwtAdapter implements TokenPort {
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
+    }
+
+    private String extractUsername(String token) {
+        return extractClaim(token, Claims::getSubject);
     }
 
 }

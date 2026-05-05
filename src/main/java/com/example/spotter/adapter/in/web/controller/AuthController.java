@@ -1,14 +1,17 @@
-package com.example.spotter.adapter.in.web;
+package com.example.spotter.adapter.in.web.controller;
 
 import com.example.spotter.adapter.in.web.dto.AuthResponse;
 import com.example.spotter.adapter.in.web.dto.LoginRequest;
+import com.example.spotter.adapter.in.web.dto.RegisterRequest;
 import com.example.spotter.adapter.in.web.dto.UserDTO;
 import com.example.spotter.application.command.LoginCommand;
+import com.example.spotter.application.command.RegisterCommand;
 import com.example.spotter.port.in.AuthenticationPort;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +31,17 @@ public class AuthController {
 
     public AuthController(AuthenticationPort authenticationPort) {
         this.authenticationPort = authenticationPort;
+    }
+
+    @Operation(summary = "register", description = "Register to application")
+    @PostMapping("/register")
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest registerRequest, HttpServletResponse response) {
+        var registerCommand = new RegisterCommand(registerRequest.username(), registerRequest.username(), registerRequest.firstName(), registerRequest.lastName(), registerRequest.password());
+        var token = authenticationPort.register(registerCommand);
+        var tokenAgeSeconds = Long.valueOf(expirationTimeMs / 1000).intValue();
+        var cookie = createCookie(accessTokenName, token, tokenAgeSeconds);
+        response.addCookie(cookie);
+        return ResponseEntity.ok(new AuthResponse(token));
     }
 
     @Operation(summary = "Login", description = "Login to application")
@@ -56,6 +70,10 @@ public class AuthController {
         return ResponseEntity.ok(UserDTO.fromDomain(user));
     }
 
+    private Cookie createCookieWithoutAge(String name) {
+        return createCookie(name, "", 0);
+    }
+
     private Cookie createCookie(String name, String token, int ageSeconds) {
         var cookie = new Cookie(name, token);
         cookie.setHttpOnly(true);
@@ -63,10 +81,6 @@ public class AuthController {
         cookie.setPath("/");
         cookie.setMaxAge(ageSeconds);
         return cookie;
-    }
-
-    private Cookie createCookieWithoutAge(String name) {
-        return createCookie(name, "", 0);
     }
 
 }

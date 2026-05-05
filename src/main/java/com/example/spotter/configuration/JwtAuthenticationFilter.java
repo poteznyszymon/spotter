@@ -1,6 +1,9 @@
 package com.example.spotter.configuration;
 
+import com.example.spotter.domain.Role;
+import com.example.spotter.domain.User;
 import com.example.spotter.port.out.TokenPort;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -10,12 +13,12 @@ import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.UUID;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -24,11 +27,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private String accessTokenName;
 
     private final TokenPort tokenPort;
-    private final UserDetailsService userDetailsService;
 
-    public JwtAuthenticationFilter(TokenPort tokenPort, UserDetailsService userDetailsService) {
+    public JwtAuthenticationFilter(TokenPort tokenPort) {
         this.tokenPort = tokenPort;
-        this.userDetailsService = userDetailsService;
     }
 
     @Override
@@ -48,11 +49,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         try {
-            final var username = tokenPort.extractUsername(token);
+            final var username = tokenPort.extractClaim(token, Claims::getSubject);
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                var userDetails = userDetailsService.loadUserByUsername(username);
-                if (tokenPort.isTokenValid(token, userDetails.getUsername())) {
-                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                if (tokenPort.isTokenValid(token, username)) {
+                    var user = new User();
+                    user.setUuid(UUID.fromString(tokenPort.extractClaim(token, claims -> claims.get("id", String.class))));
+                    user.setUsername(username);
+                    user.setRole(tokenPort.extractClaim(token, claims -> Role.valueOf(claims.get("role", String.class))));
+                    user.setEnabled(tokenPort.extractClaim(token, claims -> claims.get("enabled", Boolean.class)));
+                    user.setEmail(tokenPort.extractClaim(token, claims -> claims.get("email", String.class)));
+                    user.setFirstName(tokenPort.extractClaim(token, claims -> claims.get("firstName", String.class)));
+                    user.setLastName(tokenPort.extractClaim(token, claims -> claims.get("lastName", String.class)));
+
+                    var userDetails = new DomainUserDetails(user);
+                    var authToken = new UsernamePasswordAuthenticationToken(
                             userDetails,
                             null,
                             userDetails.getAuthorities()
