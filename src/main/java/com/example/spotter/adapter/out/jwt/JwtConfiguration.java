@@ -1,6 +1,6 @@
 package com.example.spotter.adapter.out.jwt;
 
-import com.example.spotter.port.out.TokenPort;
+import com.example.spotter.port.out.JwtPort;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +16,7 @@ public class JwtConfiguration {
     private long expirationTimeMs;
 
     @Bean
-    TokenPort tokenPort() {
+    JwtPort tokenPort() {
         return new JwtAdapter(secret, expirationTimeMs);
     }
 

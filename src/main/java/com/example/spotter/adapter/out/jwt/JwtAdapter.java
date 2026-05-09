@@ -1,7 +1,7 @@
 package com.example.spotter.adapter.out.jwt;
 
 import com.example.spotter.domain.User;
-import com.example.spotter.port.out.TokenPort;
+import com.example.spotter.port.out.JwtPort;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -11,7 +11,7 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.function.Function;
 
-public class JwtAdapter implements TokenPort {
+public class JwtAdapter implements JwtPort {
 
     private final String secret;
     private final long expirationTimeMs;

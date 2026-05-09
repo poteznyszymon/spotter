@@ -6,7 +6,9 @@ import com.example.spotter.domain.User;
 
 public interface AuthenticationPort {
     String login(LoginCommand command);
-    String register(RegisterCommand command);
+    void register(RegisterCommand command);
     void logout();
     User getAuthenticatedUser();
+    void activateAccount(String token);
+    void resendActivationLink(String email);
 }

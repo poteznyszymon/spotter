@@ -32,7 +32,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(
                         auth -> auth
                                 .requestMatchers("/v3/**", "/swagger-ui/**").permitAll()
-                                .requestMatchers("/api/auth/login", "/api/auth/logout", "/api/auth/register").permitAll()
+                                .requestMatchers("/api/auth/login", "/api/auth/logout", "/api/auth/register", "/api/auth/activate", "/api/auth/resend-activation").permitAll()
                                 .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

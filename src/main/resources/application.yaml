@@ -35,3 +35,5 @@ jwt-properties:
   expirationTimeMs: ${JWT_EXPIRATION_MS}
   accessTokenName: ${JWT_ACCESS_TOKEN_NAME}
 
+app:
+  base-url: http://localhost:8080

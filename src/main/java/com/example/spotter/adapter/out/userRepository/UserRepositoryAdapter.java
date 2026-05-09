@@ -18,8 +18,8 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
     }
 
     @Override
-    public void save(User user) {
-        userJpaRepository.save(userMapper.toEntity(user));
+    public User save(User user) {
+        return userMapper.toDomain(userJpaRepository.save(userMapper.toEntity(user)));
     }
 
     @Override
@@ -28,8 +28,13 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
     }
 
     @Override
-    public Optional<User> findById(UUID id) {
+    public Optional<User> findByUuid(UUID id) {
         return userJpaRepository.findById(id).map(userMapper::toDomain);
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return userJpaRepository.findByEmail(email).map(userMapper::toDomain);
     }
 
     @Override

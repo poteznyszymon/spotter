@@ -46,7 +46,7 @@ public class UserEntity {
     private boolean locked = false;
 
     @Column(nullable = false)
-    private boolean enabled = true;
+    private boolean enabled = false;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "avatar_id")

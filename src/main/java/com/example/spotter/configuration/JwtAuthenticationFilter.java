@@ -2,7 +2,7 @@ package com.example.spotter.configuration;
 
 import com.example.spotter.domain.Role;
 import com.example.spotter.domain.User;
-import com.example.spotter.port.out.TokenPort;
+import com.example.spotter.port.out.JwtPort;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -26,10 +26,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Value("${jwt-properties.accessTokenName:token}")
     private String accessTokenName;
 
-    private final TokenPort tokenPort;
+    private final JwtPort jwtPort;
 
-    public JwtAuthenticationFilter(TokenPort tokenPort) {
-        this.tokenPort = tokenPort;
+    public JwtAuthenticationFilter(JwtPort jwtPort) {
+        this.jwtPort = jwtPort;
     }
 
     @Override
@@ -49,17 +49,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         try {
-            final var username = tokenPort.extractClaim(token, Claims::getSubject);
+            final var username = jwtPort.extractClaim(token, Claims::getSubject);
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                if (tokenPort.isTokenValid(token, username)) {
+                if (jwtPort.isTokenValid(token, username)) {
                     var user = new User();
-                    user.setUuid(UUID.fromString(tokenPort.extractClaim(token, claims -> claims.get("id", String.class))));
+                    user.setUuid(UUID.fromString(jwtPort.extractClaim(token, claims -> claims.get("id", String.class))));
                     user.setUsername(username);
-                    user.setRole(tokenPort.extractClaim(token, claims -> Role.valueOf(claims.get("role", String.class))));
-                    user.setEnabled(tokenPort.extractClaim(token, claims -> claims.get("enabled", Boolean.class)));
-                    user.setEmail(tokenPort.extractClaim(token, claims -> claims.get("email", String.class)));
-                    user.setFirstName(tokenPort.extractClaim(token, claims -> claims.get("firstName", String.class)));
-                    user.setLastName(tokenPort.extractClaim(token, claims -> claims.get("lastName", String.class)));
+                    user.setRole(jwtPort.extractClaim(token, claims -> Role.valueOf(claims.get("role", String.class))));
+                    user.setEnabled(jwtPort.extractClaim(token, claims -> claims.get("enabled", Boolean.class)));
+                    user.setEmail(jwtPort.extractClaim(token, claims -> claims.get("email", String.class)));
+                    user.setFirstName(jwtPort.extractClaim(token, claims -> claims.get("firstName", String.class)));
+                    user.setLastName(jwtPort.extractClaim(token, claims -> claims.get("lastName", String.class)));
 
                     var userDetails = new DomainUserDetails(user);
                     var authToken = new UsernamePasswordAuthenticationToken(

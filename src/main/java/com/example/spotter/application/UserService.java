@@ -33,7 +33,7 @@ public class UserService {
         }
 
         // TODO change to custom error like usernotfound
-        var user = userRepositoryPort.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        var user = userRepositoryPort.findByUuid(userId).orElseThrow(() -> new RuntimeException("User not found"));
         if (user.getAvatar() != null) {
             filePort.delete(StorageBucket.AVATARS, user.getAvatar().getObjectKey());
         }

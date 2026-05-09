@@ -13,6 +13,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,13 +36,10 @@ public class AuthController {
 
     @Operation(summary = "register", description = "Register to application")
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest registerRequest, HttpServletResponse response) {
-        var registerCommand = new RegisterCommand(registerRequest.username(), registerRequest.username(), registerRequest.firstName(), registerRequest.lastName(), registerRequest.password());
-        var token = authenticationPort.register(registerCommand);
-        var tokenAgeSeconds = Long.valueOf(expirationTimeMs / 1000).intValue();
-        var cookie = createCookie(accessTokenName, token, tokenAgeSeconds);
-        response.addCookie(cookie);
-        return ResponseEntity.ok(new AuthResponse(token));
+    public ResponseEntity<Void> register(@Valid @RequestBody RegisterRequest registerRequest, HttpServletResponse response) {
+        var registerCommand = new RegisterCommand(registerRequest.email(), registerRequest.username(), registerRequest.firstName(), registerRequest.lastName(), registerRequest.password());
+        authenticationPort.register(registerCommand);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Operation(summary = "Login", description = "Login to application")
@@ -68,6 +66,20 @@ public class AuthController {
     public ResponseEntity<UserDTO> getCurrentUser() {
         var user = authenticationPort.getAuthenticatedUser();
         return ResponseEntity.ok(UserDTO.fromDomain(user));
+    }
+
+    @Operation(summary = "Activate account", description = "Activate user account with activation token")
+    @GetMapping("/activate")
+    public ResponseEntity<String> activate(@RequestParam String token) {
+        authenticationPort.activateAccount(token);
+        return ResponseEntity.ok("Account activated");
+    }
+
+    @Operation(summary = "Resend activation link", description = "Resend verification link to mailbox")
+    @PostMapping("/resend-activation")
+    public ResponseEntity<String> resendActivationToken(@RequestParam String email) {
+        authenticationPort.resendActivationLink(email);
+        return ResponseEntity.ok("activation link has been sent");
     }
 
     private Cookie createCookieWithoutAge(String name) {
